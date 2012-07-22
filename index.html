@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <title>Union Bridge Drum Co</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Union Bridge Drum Co. Custom Drums">
+    <meta name="keywords" content="stave, drum, snare, union, bridge, custom, calculator">
+    <meta name="author" content="Todd Treece">
+    <link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" >
+
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link href="css/spacelab.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/stave.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#">Union Bridge Drum Co</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Stave Calculator</a></li>
+              <li class="active"><a href="/about.html">About</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top:50px;">
+
+      <div class="row-fluid">
+
+        <div class="span4">
+
+          <form class="form-horizontal well" id="staveform">
+
+            <fieldset>
+
+              <legend>Stave Calculator</legend>
+
+              <div class="control-group">
+                <label class="control-label" for="stave_count">Number of Segments</label>
+                <div class="controls">
+                  <input type="number" class="input-mini" name="stave_count" min="6" max="40" id="stave_count" placeholder="20" value="20" required>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="shell_diameter">Shell Diameter</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input type="number" class="input-mini" name="shell_diameter" min="6" max="30" id="shell_diameter" placeholder="14" value="14" required><span class="unit add-on">in</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="shell_depth">Shell Depth</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input type="text" pattern="\d+(\.\d{0,1})?" class="input-mini" name="shell_depth" id="shell_depth" placeholder="5.5" value="5.5" required><span class="unit add-on">in</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="board_thickness">Measured Thickness</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input type="text" pattern="\d+(\.\d{0,4})?" class="input-mini" name="board_thickness" id="board_thickness" placeholder="0.750" value="0.750" required><span class="unit add-on">in</span>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+
+            <fieldset id="lumber">
+
+              <legend>Lumber Calculator</legend>
+
+              <div class="control-group">
+                <label class="control-label" for="board_width">Board Width</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input type="text" pattern="\d+(\.\d{0,4})?" class="input-mini" name="board_width" id="board_width" placeholder="5.00" value="5.00" required><span class="unit add-on">in</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="board_cost">Cost per Board Foot</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on">$</span><input type="text" pattern="\d+(\.\d{0,2})?" class="input-mini" name="board_cost" id="board_cost" placeholder="11.00" value="11.00" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="crosscut_kerf">Crosscut Kerf</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <input type="text" pattern="\d+(\.\d{0,5})?" class="input-mini" name="crosscut_kerf" id="crosscut_kerf" placeholder="0.09375" value="0.09375" required><span class="add-on">in</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="rip_kerf">Rip Kerf</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input type="text" pattern="\d+(\.\d{0,5})?" class="input-mini" name="rip_kerf" id="rip_kerf" placeholder="0.09375" value="0.09375" required><span class="add-on">in</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="waste_factor">Waste Factor</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input type="number" class="input-mini" name="waste_factor" id="waste_factor" min="0" max="100" placeholder="15" value="15" required><span class="add-on">%</span>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Calculate</button>
+            <button class="btn btn-info" data-toggle="button" onclick="$('#lumber').slideToggle(); return false;">Advanced</button>
+
+          </form>
+
+          <div class="row-fluid" id="results">
+
+            <div class="span6">
+
+              <dl>
+
+                <dt>Common Diameter<dt>
+                <dd id="display_shell_diameter"></dd>
+
+                <dt>Finished Diameter<dt>
+                <dd id="display_finished_diameter"></dd>
+
+                <dt>Shell Depth<dt>
+                <dd id="display_shell_depth"></dd>
+
+                <dt>Number of Staves<dt>
+                <dd id="display_stave_count"></dd>
+
+                <dt>Stave Thickness<dt>
+                <dd id="display_board_thickness"></dd>
+
+                <dt>Rounded Thickness<dt>
+                <dd id="display_rounded_thickness"></dd>
+
+                <dt class="advanced">Staves per Width<dt>
+                <dd class="advanced" id="display_staves_per_width"></dd>
+
+                <dt class="advanced">Staves per Length<dt>
+                <dd class="advanced" id="display_staves_per_length"></dd>
+
+              </dl>
+
+            </div>
+
+            <div class="span6">
+
+              <dl>
+
+                <dt>Stave Outer Width<dt>
+                <dd id="display_outer_dimension"></dd>
+
+                <dt>Stave Inner Width<dt>
+                <dd id="display_inner_dimension"></dd>
+
+                <dt>Joint Angle<dt>
+                <dd id="display_joint_angle"></dd>
+
+                <dt>Bevel Angle<dt>
+                <dd id="display_bevel_angle"></dd>
+
+                <dt class="advanced">Board Length Required<dt>
+                <dd class="advanced" id="display_board_length"></dd>
+
+                <dt class="advanced">Board Feet Required<dt>
+                <dd class="advanced" id="display_board_feet"></dd>
+
+                <dt class="advanced">Cost Per Shell<dt>
+                <dd class="advanced" id="display_cost"></dd>
+
+              </dl>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="span8 hero-unit">
+
+          <div id="logo">
+            <img src="img/ubdc_300.png">
+            <h2>Stave Calculator</h2>
+            <p>
+               The Union Bridge Drum Co. Stave Calculator is a free and open source utility for 
+               calculating the dimensions, angles, and costs assoicated with the production
+               of stave drums.  If you would like to improve or make modifications to this utility, you 
+               can fork the project on <a href="http://github.com/toddtreece/stave" target="_blank">GitHub</a>.
+            </p>
+            <p>
+              This site requires the latest version of
+              <a href="https://www.google.com/chrome" target="_blank">Google Chrome</a> or
+              <a href="http://www.mozilla.org/firefox" target="_blank">Mozilla Firefox</a>.
+            </p>
+          </div>
+
+          <div>
+            <div id="illustration"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/raphael.min.js"></script>
+    <script src="js/stave.js"></script>
+    <script src="js/form.js"></script>
+    <script src="js/illustration.js"></script>
+
+  </body>
+
+</html>
+

@@ -1,0 +1,18 @@
+#lumber {
+  display: none;
+}
+#illustration {
+  display: none;
+}
+#results {
+  display: none;
+}
+#logo {
+  text-align: center;
+}
+#logo img {
+  margin-bottom: 20px;
+}
+#logo p {
+  text-align: left;
+}
