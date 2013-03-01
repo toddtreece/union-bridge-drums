@@ -51,6 +51,16 @@
               <legend>Stave Calculator</legend>
 
               <div class="control-group">
+                <label class="control-label" for="stave_count">Unit</label>
+                <div class="controls">
+                  <select class="input-medium" name="unit" id="unit">
+                    <option value="&quot;">Inches</option>
+                    <option value="cm">Centimeters</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="control-group">
                 <label class="control-label" for="stave_count">Number of Segments</label>
                 <div class="controls">
                   <input type="number" class="input-mini" name="stave_count" min="6" max="40" id="stave_count" placeholder="20" value="20" required>
@@ -61,7 +71,7 @@
                 <label class="control-label" for="shell_diameter">Shell Diameter</label>
                 <div class="controls">
                   <div class="input-append">
-                    <input type="number" class="input-mini" name="shell_diameter" min="6" max="30" id="shell_diameter" placeholder="14" value="14" required><span class="unit add-on">in</span>
+                    <input type="text" pattern="\d+(\.\d{0,4})?" class="unit input-mini" name="shell_diameter" id="shell_diameter" placeholder="14" value="14" required><span class="unit add-on">in</span>
                   </div>
                 </div>
               </div>
@@ -70,7 +80,7 @@
                 <label class="control-label" for="shell_depth">Shell Depth</label>
                 <div class="controls">
                   <div class="input-append">
-                    <input type="text" pattern="\d+(\.\d{0,1})?" class="input-mini" name="shell_depth" id="shell_depth" placeholder="5.5" value="5.5" required><span class="unit add-on">in</span>
+                    <input type="text" pattern="\d+(\.\d{0,4})?" class="unit input-mini" name="shell_depth" id="shell_depth" placeholder="5.5" value="5.5" required><span class="unit add-on">in</span>
                   </div>
                 </div>
               </div>
@@ -79,7 +89,7 @@
                 <label class="control-label" for="board_thickness">Measured Thickness</label>
                 <div class="controls">
                   <div class="input-append">
-                    <input type="text" pattern="\d+(\.\d{0,4})?" class="input-mini" name="board_thickness" id="board_thickness" placeholder="0.750" value="0.750" required><span class="unit add-on">in</span>
+                    <input type="text" pattern="\d+(\.\d{0,4})?" class="unit input-mini" name="board_thickness" id="board_thickness" placeholder="0.750" value="0.750" required><span class="unit add-on">in</span>
                   </div>
                 </div>
               </div>
@@ -94,7 +104,7 @@
                 <label class="control-label" for="board_width">Board Width</label>
                 <div class="controls">
                   <div class="input-append">
-                    <input type="text" pattern="\d+(\.\d{0,4})?" class="input-mini" name="board_width" id="board_width" placeholder="5.00" value="5.00" required><span class="unit add-on">in</span>
+                    <input type="text" pattern="\d+(\.\d{0,4})?" class="unit input-mini" name="board_width" id="board_width" placeholder="5.00" value="5.00" required><span class="unit add-on">in</span>
                   </div>
                 </div>
               </div>
@@ -112,7 +122,7 @@
                 <label class="control-label" for="crosscut_kerf">Crosscut Kerf</label>
                 <div class="controls">
                   <div class="input-prepend">
-                    <input type="text" pattern="\d+(\.\d{0,5})?" class="input-mini" name="crosscut_kerf" id="crosscut_kerf" placeholder="0.09375" value="0.09375" required><span class="add-on">in</span>
+                    <input type="text" pattern="\d+(\.\d{0,5})?" class="unit input-mini" name="crosscut_kerf" id="crosscut_kerf" placeholder="0.09375" value="0.09375" required><span class="unit add-on">in</span>
                   </div>
                 </div>
               </div>
@@ -121,7 +131,7 @@
                 <label class="control-label" for="rip_kerf">Rip Kerf</label>
                 <div class="controls">
                   <div class="input-append">
-                    <input type="text" pattern="\d+(\.\d{0,5})?" class="input-mini" name="rip_kerf" id="rip_kerf" placeholder="0.09375" value="0.09375" required><span class="add-on">in</span>
+                    <input type="text" pattern="\d+(\.\d{0,5})?" class="unit input-mini" name="rip_kerf" id="rip_kerf" placeholder="0.09375" value="0.09375" required><span class="unit add-on">in</span>
                   </div>
                 </div>
               </div>

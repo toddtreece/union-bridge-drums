@@ -29,6 +29,7 @@ function illustration(el, sc) {
   this.background = 'whiteSmoke';
   this.width = 600;
   this.height = this.width;
+  this.unit = '"';
 
   this.paper = new Raphael(el, this.width, this.height);
   this.stave = sc;
@@ -146,7 +147,7 @@ function illustration(el, sc) {
       fill: this.background,
       stroke: this.background
     });
-    this.paper.text(this.centerWidth() + this.scale(0.01), this.centerHeight(), Math.round(this.stave.shell_diameter) + '"').attr({
+    this.paper.text(this.centerWidth() + this.scale(0.01), this.centerHeight(), this.stave.shell_diameter.toFixed(1) + this.unit).attr({
       'font-size': this.scale(0.04),
       'font-weight': 'bold'
     });
@@ -182,7 +183,7 @@ function illustration(el, sc) {
       stroke: this.background
     });
 
-    var deg_txt = this.paper.text(this.centerWidth(), base_y_mid, this.stave.outerDimension().toFixed(2) + '"').attr({
+    var deg_txt = this.paper.text(this.centerWidth(), base_y_mid, this.stave.outerDimension().toFixed(2) + this.unit).attr({
       'font-size': this.scale(0.02),
       'font-weight': 'bold'
     });
@@ -227,7 +228,7 @@ function illustration(el, sc) {
       stroke: this.background
     });
 
-    var deg_txt = this.paper.text(this.centerWidth(), base2_y_mid, this.stave.innerDimension().toFixed(2) + '"').attr({
+    var deg_txt = this.paper.text(this.centerWidth(), base2_y_mid, this.stave.innerDimension().toFixed(2) + this.unit).attr({
       'font-size': this.scale(0.02),
       'font-weight': 'bold'
     });

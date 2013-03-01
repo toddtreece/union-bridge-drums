@@ -32,7 +32,7 @@ function stave() {
   this.rip_kerf = 0.09375;
   this.crosscut_kerf = 0.09375;
 
-  this.shell_diameter = 14;
+  this.shell_diameter = 14.0;
   this.stave_count = 20;
   this.shell_depth = 5.5;
 
@@ -148,15 +148,15 @@ function stave() {
 
   };
 
-  this.toMillimeters = function(inches) {
+  this.toCentimeters = function(inches) {
 
-    return inches * 25.4;
+    return inches * 2.54;
 
   };
 
-  this.toInches = function(mm) {
+  this.toInches = function(cm) {
 
-    return mm / 25.4;
+    return cm / 2.54;
 
   };
 
