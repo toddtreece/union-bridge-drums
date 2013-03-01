@@ -69,7 +69,7 @@ $(document).ready(function() {
 
     /** SET DISPLAY VALUES **/
     $('#display_shell_diameter').html(s.shell_diameter.toFixed(3) + $('#unit').val());
-    $('#display_finished_diameter').html(s.shell_diameter.toFixed(3) + $('#unit').val());
+    $('#display_finished_diameter').html((s.shell_diameter.toFixed(3)) - s.extra + $('#unit').val());
     $('#display_shell_depth').html(s.shell_depth.toFixed(1) + $('#unit').val());
     $('#display_stave_count').html(s.stave_count);
     $('#display_board_thickness').html(s.board_thickness.toFixed(3) + $('#unit').val());
