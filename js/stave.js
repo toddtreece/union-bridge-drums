@@ -91,7 +91,7 @@ function stave() {
 
   this.outerDimension = function() {
 
-    return (2 * ( this.externalDiameter() / Math.cos( Math.PI / this.stave_count ) / 2 ) * Math.sin( Math.PI / this.stave_count ) );
+    return Math.tan( this.toRadians( this.bevelAngle() ) ) * this.externalDiameter();
 
   };
 
