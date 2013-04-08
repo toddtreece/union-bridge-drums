@@ -27,10 +27,13 @@
 $(document).ready(function() {
 
   var s = new stave();
+  var r = new ruler();
 
   var si = new illustration('illustration', s);
 
   var init = false;
+
+  $('input.info').popover({trigger: 'focus'})
 
   $('#staveform').submit(function(event) {
 
@@ -39,51 +42,65 @@ $(document).ready(function() {
     /** CHECK VALIDITY **/
     $(this).find('input').each(function() {
 
-      if (this.validity.valid == false)
+      if(this.validity.valid == false)
         $(this).closest('div.control-group').addClass('error');
       else
         $(this).closest('div.control-group').removeClass('error');
 
     });
 
-    if (this.checkValidity() == false)
+    if(this.checkValidity() == false)
       return false;
 
-    /** GET FORM VALUES **/
-    s.stave_count = parseInt($.trim($('#stave_count').val()));
-    s.shell_diameter = parseFloat($.trim($('#shell_diameter').val()));
-    s.shell_depth = parseFloat($.trim($('#shell_depth').val()));
-    s.board_thickness = parseFloat($.trim($('#board_thickness').val()));
-    s.board_width = parseFloat($.trim($('#board_width').val()));
-    s.cost_board_ft = parseFloat($.trim($('#board_cost').val()));
-    s.crosscut_kerf = parseFloat($.trim($('#crosscut_kerf').val()));
-    s.rip_kerf = parseFloat($.trim($('#rip_kerf').val()));
-    s.waste_factor = (parseFloat($.trim($('#waste_factor').val())) / 100) + 1;
+    var unit = $('select[name=unit]').val();
 
-    if ($('#lumber').is(':visible')) {
-      $('.advanced').show();
-      $('#lumber').slideToggle();
-    } else {
-      $('.advanced').hide();
-    }
+    $(this).find('input').each(function() {
 
-    /** SET DISPLAY VALUES **/
-    $('#display_shell_diameter').html(s.shell_diameter.toFixed(3) + $('#unit').val());
-    $('#display_finished_diameter').html((s.shell_diameter.toFixed(3)) - s.extra + $('#unit').val());
-    $('#display_shell_depth').html(s.shell_depth.toFixed(1) + $('#unit').val());
-    $('#display_stave_count').html(s.stave_count);
-    $('#display_board_thickness').html(s.board_thickness.toFixed(3) + $('#unit').val());
-    $('#display_rounded_thickness').html(s.roundedThickness().toFixed(3) + $('#unit').val());
-    $('#display_staves_per_width').html(s.stavesPerWidth());
-    $('#display_staves_per_length').html(s.stavesPerLength());
+      var val;
 
-    $('#display_outer_dimension').html(s.outerDimension().toFixed(3) + $('#unit').val());
-    $('#display_inner_dimension').html(s.innerDimension().toFixed(3) + $('#unit').val());
-    $('#display_joint_angle').html(s.jointAngle().toFixed(2) + '&deg;');
-    $('#display_bevel_angle').html(s.bevelAngle().toFixed(2) + '&deg;');
-    $('#display_board_length').html(s.boardLengthRequired().toFixed(3) + $('#unit').val());
-    $('#display_board_feet').html(s.boardFeetRequired().toFixed(3) + $('#unit').val());
-    $('#display_cost').html('$' + s.shellCost().toFixed(2));
+      // convert cm to inches for calculations
+      if($(this).data('unit') == 'cm')
+        val = r.toInches(parseFloat($(this).val()));
+      else
+        val = parseFloat($(this).val());
+
+      s[$(this).attr('name')] = val;
+
+    });
+
+    var results = {
+      'stave_count': s.stave_count,
+      'staves_per_width': s.stavesPerWidth(),
+      'staves_per_length': s.stavesPerLength(),
+      'joint_angle': s.jointAngle().toFixed(2),
+      'bevel_angle': s.bevelAngle().toFixed(2),
+      'cost': s.shellCost().toFixed(2),
+      'board_feet': s.boardFeetRequired().toFixed(2),
+      'decimal': {},
+      'fraction': {},
+      'cm': {}
+    };
+
+    results.decimal = {
+      'rough_diameter': s.externalDiameter().toFixed(4),
+      'finished_diameter': s.finishedDiameter().toFixed(4),
+      'shell_depth': s.shell_depth.toFixed(2),
+      'board_thickness': s.board_thickness.toFixed(3),
+      'rounded_thickness': s.roundedThickness().toFixed(3),
+      'outer_dimension': s.outerDimension().toFixed(3),
+      'inner_dimension': s.innerDimension().toFixed(3),
+      'board_length': s.boardLengthRequired().toFixed(3)
+    };
+
+    $.each(results.decimal, function(key, val) {
+      results.fraction[key] = r.toFraction(val);
+      results.cm[key] = r.toCentimeters(val).toFixed(2);
+    });
+
+    var temp = $('#result_template').html(),
+        rendered = $.mustache(temp, results);
+
+    $('#results').html(rendered);
 
     if (init) {
       si.resize($('#illustration').width());
@@ -100,49 +117,55 @@ $(document).ready(function() {
 
   });
 
-  $('#unit').change(function() {
+  $('select[name=unit]').change(function() {
 
     var unit = $(this).val();
 
-    if(unit == '"') {
+    $('input.unit').each(function(i, el) {
 
-      $('span.unit').html('in');
+      var converted;
 
-      $('input.unit').each(function(i, el) {
+      if($(this).data('unit') == 'in' && unit != 'in')
+        converted = r.toCentimeters( parseFloat( $(this).val() ) );
+      else if ($(this).data('unit') == 'cm' && unit != 'cm')
+        converted = r.toInches( parseFloat( $(this).val() ) );
 
-        var converted = s.toInches( parseFloat( $(el).val() ) );
+      converted = converted.toFixed($(this).data('precision'));
 
-        if($(el).is('#crosscut_kerf') || $(el).is('#rip_kerf'))
-          converted = converted.toFixed(5);
-        else
-          converted = converted.toFixed(3);
+      $(this).data('unit', unit);
+      $(this).val(converted);
 
-        $(el).val(converted);
+      $(this).next().html(unit);
 
-      });
+    });
 
-      s.extra = s.toInches(s.extra);
-      si.unit = unit;
+    si.unit = unit;
 
-    } else if (unit == 'cm') {
+  });
 
-      $('span.unit').html('cm');
+  $('span.unit').click(function() {
 
-      $('input.unit').each(function(i, el) {
+    var unit = $(this).prev().data('unit');
 
-        var converted = s.toCentimeters( parseFloat( $(el).val() ) );
+    if(unit == 'in') {
 
-        if($(el).is('#crosscut_kerf') || $(el).is('#rip_kerf'))
-          converted = converted.toFixed(5);
-        else
-          converted = converted.toFixed(3);
+      var input = $(this).prev(),
+          converted = r.toCentimeters( parseFloat( input.val() ) );
 
-        $(el).val(converted);
+      input.data('unit', 'cm');
+      input.val( converted.toFixed( input.data('precision') ) );
 
-      });
+      $(this).html('cm');
 
-      s.extra = s.toCentimeters(s.extra);
-      si.unit = '';
+    } else {
+
+      var input = $(this).prev(),
+          converted = r.toInches( parseFloat( input.val() ) );
+
+      input.data('unit', 'in');
+      input.val( converted.toFixed( input.data('precision') ) );
+
+      $(this).html('in');
 
     }
 

@@ -26,7 +26,6 @@
 
 function stave() {
 
-  // in inches. add this to the shell diameter
   this.extra = 0.125;
 
   this.rip_kerf = 0.09375;
@@ -40,8 +39,19 @@ function stave() {
   this.board_width = 5.00;
   this.cost_board_ft = 11.00;
 
-  this.waste_factor = 1.15;
+  this.waste_factor = 15;
 
+  this.finishedDiameter = function() {
+
+    return this.shell_diameter - 0.125;
+
+  };
+
+  this.finishedRadius = function() {
+
+    return this.finishedDiameter() / 2;
+
+  };
 
   this.externalDiameter = function() {
 
@@ -101,7 +111,9 @@ function stave() {
 
     var x_sq = (this.innerDimension() / 2) * (this.innerDimension() / 2);
 
-    return this.board_thickness - (this.externalRadius() - Math.sqrt( internal_sq - x_sq ) - this.board_thickness);
+    var diff = this.externalRadius() - Math.sqrt(internal_sq - x_sq) - this.board_thickness;
+
+    return this.board_thickness - 0.125 - diff;
 
   };
 
@@ -125,7 +137,7 @@ function stave() {
 
   this.boardFeetRequired = function() {
 
-    return ((this.board_width * this.boardLengthRequired() * this.board_thickness) / 144) * this.waste_factor;
+    return ((this.board_width * this.boardLengthRequired() * this.board_thickness) / 144) * ((this.waste_factor / 100) + 1);
 
   };
 
@@ -145,18 +157,6 @@ function stave() {
   this.toDegrees = function(rad) {
 
     return rad * (180 / Math.PI);
-
-  };
-
-  this.toCentimeters = function(inches) {
-
-    return inches * 2.54;
-
-  };
-
-  this.toInches = function(cm) {
-
-    return cm / 2.54;
 
   };
 

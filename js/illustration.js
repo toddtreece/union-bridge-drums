@@ -92,11 +92,9 @@ function illustration(el, sc) {
 
   this.drawRoundedShell = function() {
 
-    var scaled_extra = this.scaleFactor() * this.stave.extra;
+    var outer = (this.scaleFactor() * (this.stave.finishedDiameter() / 2));
 
-    var outer = (this.scaleFactor() * this.stave.externalRadius()) - (scaled_extra / 2);
-
-    var inner = outer - (this.scaleFactor() * this.stave.roundedThickness()) + scaled_extra;
+    var inner = outer - (this.scaleFactor() * this.stave.roundedThickness());
 
     var outer_shell = this.paper.circle(this.centerWidth(), this.centerHeight(), outer).attr({
       stroke: '#E15454'
@@ -128,7 +126,7 @@ function illustration(el, sc) {
 
     var scaled_extra = this.scaleFactor() * this.stave.extra;
 
-    var outer = (this.scaleFactor() * this.stave.externalRadius()) - (scaled_extra / 2) - 1;
+    var outer = (this.scaleFactor() * this.stave.finishedRadius()) - 1;
 
     var dia  = 'M' + this.centerWidth() + ' ' + this.centerHeight();
         dia += 'L' + this.centerWidth() + ' ' + (this.centerHeight() - outer);
@@ -143,11 +141,14 @@ function illustration(el, sc) {
     arrow1.transform('r90,' + this.centerWidth() + ',' + (this.centerHeight() - outer));
     arrow2.transform('r270,' + this.centerWidth() + ',' + (this.centerHeight() + outer));
 
-    this.paper.circle(this.centerWidth(), this.centerHeight(), this.scale(0.045)).attr({
+    var circle = this.paper.circle(this.centerWidth(), this.centerHeight(), this.scale(0.075));
+
+    circle.attr({
       fill: this.background,
-      stroke: this.background
+      stroke: this.background,
     });
-    this.paper.text(this.centerWidth() + this.scale(0.01), this.centerHeight(), this.stave.shell_diameter.toFixed(1) + this.unit).attr({
+
+    this.paper.text(this.centerWidth(), this.centerHeight(), this.stave.finishedDiameter().toFixed(3) + this.unit).attr({
       'font-size': this.scale(0.04),
       'font-weight': 'bold'
     });
