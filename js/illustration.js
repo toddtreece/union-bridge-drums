@@ -29,10 +29,11 @@ function illustration(el, sc) {
   this.background = 'whiteSmoke';
   this.width = 600;
   this.height = this.width;
-  this.unit = '"';
+  this.unit = 'in';
 
   this.paper = new Raphael(el, this.width, this.height);
   this.stave = sc;
+  this.ruler = new ruler();
 
   this.draw = function() {
 
@@ -148,7 +149,12 @@ function illustration(el, sc) {
       stroke: this.background,
     });
 
-    this.paper.text(this.centerWidth(), this.centerHeight(), this.stave.finishedDiameter().toFixed(3) + this.unit).attr({
+    var text = this.stave.finishedDiameter().toFixed(3) + '"';
+
+    if(this.unit == 'cm')
+      text = this.ruler.toCentimeters(this.stave.finishedDiameter()).toFixed(2) + 'cm';
+
+    this.paper.text(this.centerWidth(), this.centerHeight(), text).attr({
       'font-size': this.scale(0.04),
       'font-weight': 'bold'
     });
@@ -184,7 +190,12 @@ function illustration(el, sc) {
       stroke: this.background
     });
 
-    var deg_txt = this.paper.text(this.centerWidth(), base_y_mid, this.stave.outerDimension().toFixed(2) + this.unit).attr({
+    var text = this.stave.outerDimension().toFixed(2) + '"';
+
+    if(this.unit == 'cm')
+      text = this.ruler.toCentimeters(this.stave.outerDimension()).toFixed(2) + 'cm';
+
+    var deg_txt = this.paper.text(this.centerWidth(), base_y_mid, text).attr({
       'font-size': this.scale(0.02),
       'font-weight': 'bold'
     });
@@ -229,7 +240,12 @@ function illustration(el, sc) {
       stroke: this.background
     });
 
-    var deg_txt = this.paper.text(this.centerWidth(), base2_y_mid, this.stave.innerDimension().toFixed(2) + this.unit).attr({
+    var text = this.stave.innerDimension().toFixed(2) + '"';
+
+    if(this.unit == 'cm')
+      text = this.ruler.toCentimeters(this.stave.innerDimension()).toFixed(2) + 'cm';
+
+    var deg_txt = this.paper.text(this.centerWidth(), base2_y_mid, text).attr({
       'font-size': this.scale(0.02),
       'font-weight': 'bold'
     });
