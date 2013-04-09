@@ -54,6 +54,8 @@ $(document).ready(function() {
 
     var unit = $('select[name=unit]').val();
 
+    si.unit = unit;
+
     $(this).find('input').each(function() {
 
       var val;
